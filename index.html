@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ayuki.S film | Cinematographer</title>
+  
+  <!-- Fonts: Cormorant Garamond & Shippori Mincho -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Shippori+Mincho:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* Base Reset & Variables */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --bg-color: #0B0C0E;
+      --surface-color: #121316;
+      --text-main: #EEEEEE;
+      --text-muted: #8A8F99;
+      --accent: #C5A880;
+      --font-en: 'Cormorant Garamond', serif;
+      --font-jp: 'Shippori Mincho', serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: var(--font-jp);
+      line-height: 1.8;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 24px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      background: rgba(11, 12, 14, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .logo {
+      font-family: var(--font-en);
+      font-size: 1.5rem;
+      letter-spacing: 0.15em;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 30px;
+      font-family: var(--font-en);
+      letter-spacing: 0.1em;
+      font-size: 0.95rem;
+    }
+
+    nav a {
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: var(--accent);
+    }
+
+    /* Hero Section */
+    .hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      padding: 0 20px;
+      background: radial-gradient(circle at center, rgba(197, 168, 128, 0.05) 0%, transparent 70%);
+    }
+
+    .hero h1 {
+      font-family: var(--font-en);
+      font-size: clamp(2.5rem, 6vw, 5.5rem);
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .hero p.subtitle {
+      font-family: var(--font-en);
+      color: var(--accent);
+      letter-spacing: 0.25em;
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+      text-transform: uppercase;
+    }
+
+    .hero p.tagline {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      letter-spacing: 0.1em;
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      font-family: var(--font-en);
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      color: var(--text-muted);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; transform: translateY(0); }
+      50% { opacity: 1; transform: translateY(6px); }
+    }
+
+    /* Section Styles */
+    section {
+      padding: 120px 8%;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-family: var(--font-en);
+      font-size: 2.5rem;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      margin-bottom: 50px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .section-title span {
+      font-family: var(--font-jp);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+    }
+
+    /* Filter Buttons */
+    .filter-container {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 40px;
+      font-family: var(--font-en);
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+    }
+
+    .filter-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: color 0.3s;
+      padding-bottom: 4px;
+    }
+
+    .filter-btn.active, .filter-btn:hover {
+      color: var(--accent);
+      border-bottom: 1px solid var(--accent);
+    }
+
+    /* Works Grid */
+    .works-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 40px;
+    }
+
+    .work-card {
+      background: var(--surface-color);
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s;
+    }
+
+    .work-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(197, 168, 128, 0.3);
+    }
+
+    .thumbnail-box {
+      width: 100%;
+      height: 240px;
+      background-color: #1a1c23;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .thumbnail-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .work-card:hover .thumbnail-box img {
+      transform: scale(1.05);
+    }
+
+    .play-icon {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background: rgba(11, 12, 14, 0.7);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+      transition: background 0.3s;
+    }
+
+    .play-icon::after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 8px 0 8px 14px;
+      border-color: transparent transparent transparent var(--text-main);
+      margin-left: 3px;
+    }
+
+    .work-info {
+      padding: 20px;
+    }
+
+    .work-category {
+      font-family: var(--font-en);
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .work-title {
+      font-size: 1.1rem;
+      font-weight: 400;
+      margin-bottom: 8px;
+    }
+
+    .work-role {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* About Section */
+    .about-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .about-content { grid-template-columns: 1fr; }
+    }
+
+    .about-text p {
+      margin-bottom: 20px;
+      color: #cccccc;
+      font-size: 0.95rem;
+    }
+
+    .about-text p.en {
+      font-family: var(--font-en);
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    /* Equipment Section */
+    .equipment-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .equip-card {
+      background: var(--surface-color);
+      padding: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .equip-card h3 {
+      font-family: var(--font-en);
+      font-size: 1.1rem;
+      color: var(--accent);
+      margin-bottom: 12px;
+      letter-spacing: 0.1em;
+    }
+
+    .equip-card ul {
+      list-style: none;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .equip-card li {
+      margin-bottom: 6px;
+    }
+
+    /* Contact Section */
+    .contact-container {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 14px;
+      background: var(--surface-color);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus, .form-group textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .submit-btn {
+      padding: 14px 30px;
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-family: var(--font-en);
+      letter-spacing: 0.2em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .submit-btn:hover {
+      background: var(--accent);
+      color: var(--bg-color);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-muted);
+      font-family: var(--font-en);
+      font-size: 0.8rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* Modal / Lightbox */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      width: 80%;
+      max-width: 900px;
+      aspect-ratio: 16/9;
+      background: #000;
+    }
+
+    .modal-content iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 30px;
+      right: 40px;
+      color: #fff;
+      font-size: 2rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">Ayuki.S film</div>
+    <nav>
+      <ul>
+        <li><a href="#works">WORKS</a></li>
+        <li><a href="#about">ABOUT</a></li>
+        <li><a href="#equipment">EQUIPMENT</a></li>
+        <li><a href="#contact">CONTACT</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <div class="hero">
+    <h1>Ayuki.S film</h1>
+    <p class="subtitle">Cinematographer / Video Creator</p>
+    <p class="tagline">Capturing pure emotion and unspoken stories.<br>感情の揺らぎと、言葉なき物語を紡ぐ。</p>
+    <div class="scroll-indicator">SCROLL</div>
+  </div>
+
+  <!-- Works Section -->
+  <section id="works">
+    <div class="section-title">
+      WORKS
+      <span>作品一覧</span>
+    </div>
+
+    <div class="filter-container">
+      <button class="filter-btn active" onclick="filterWorks('all')">ALL</button>
+      <button class="filter-btn" onclick="filterWorks('landscape')">LANDSCAPE & TRAVEL</button>
+      <button class="filter-btn" onclick="filterWorks('mv')">MUSIC VIDEO</button>
+    </div>
+
+    <div class="works-grid">
+      <!-- Item 1 (Landscape) -->
+      <div class="work-card landscape" onclick="openModal('https://www.youtube.com/embed/dQw4w9WgXcQ')">
+        <div class="thumbnail-box">
+          <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80" alt="Silent Peak">
+          <div class="play-icon"></div>
+        </div>
+        <div class="work-info">
+          <div class="work-category">Landscape</div>
+          <div class="work-title">Silent Peak / 静寂の峰</div>
+          <div class="work-role">Cinematography / Edit</div>
+        </div>
+      </div>
+
+      <!-- Item 2 (MV) -->
+      <div class="work-card mv" onclick="openModal('https://www.youtube.com/embed/dQw4w9WgXcQ')">
+        <div class="thumbnail-box">
+          <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80" alt="Midnight Velocity">
+          <div class="play-icon"></div>
+        </div>
+        <div class="work-info">
+          <div class="work-category">Music Video</div>
+          <div class="work-title">Midnight Velocity</div>
+          <div class="work-role">Director of Photography</div>
+        </div>
+      </div>
+
+      <!-- Item 3 (Landscape) -->
+      <div class="work-card landscape" onclick="openModal('https://www.youtube.com/embed/dQw4w9WgXcQ')">
+        <div class="thumbnail-box">
+          <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=800&q=80" alt="Wanderlust: Nordic">
+          <div class="play-icon"></div>
+        </div>
+        <div class="work-info">
+          <div class="work-category">Travel</div>
+          <div class="work-title">Wanderlust: Nordic / 北欧の面影</div>
+          <div class="work-role">All Production</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about">
+    <div class="section-title">
+      ABOUT
+      <span>プロフィール</span>
+    </div>
+    <div class="about-content">
+      <div class="about-img">
+        <img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=800&q=80" alt="Ayuki.S" style="width:100%; filter: grayscale(80%);">
+      </div>
+      <div class="about-text">
+        <h2>Ayuki.S</h2>
+        <p style="color: var(--accent); margin-bottom: 20px;">Cinematographer / Video Creator</p>
+        <p>日本を拠点に、風景・旅の情景描写およびミュージックビデオ（MV）を手掛ける映像作家。映画的な質感（Cinematic Look）とストーリー性のある構図を追求し、見る者の情緒を揺さぶる映像世界を創り出す。</p>
+        <p class="en">Based in Japan, focusing on cinematic landscapes, travel stories, and music videos. Dedicated to crafting emotionally resonant visual narratives with a refined cinematic aesthetic.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Equipment Section -->
+  <section id="equipment">
+    <div class="section-title">
+      EQUIPMENT
+      <span>使用機材</span>
+    </div>
+    <div class="equipment-grid">
+      <div class="equip-card">
+        <h3>CAMERA BODY</h3>
+        <ul>
+          <li>Sony Cinema Line (FX series)</li>
+          <li>4K / 120fps RAW Recording</li>
+        </ul>
+      </div>
+      <div class="equip-card">
+        <h3>LENS</h3>
+        <ul>
+          <li>Cinema Prime Lens Set</li>
+          <li>Ultra Wide / Telephoto Zoom</li>
+        </ul>
+      </div>
+      <div class="equip-card">
+        <h3>DRONE & AUDIO</h3>
+        <ul>
+          <li>DJI 4K Cinema Drone</li>
+          <li>High-Res Wireless Audio System</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact">
+    <div class="section-title">
+      CONTACT
+      <span>お問い合わせ</span>
+    </div>
+    <div class="contact-container">
+      <p style="color: var(--text-muted);">お仕事のご依頼・ご相談は下記フォームよりお気軽にご連絡ください。</p>
+      <form class="contact-form" onsubmit="event.preventDefault(); alert('送信機能は設定が必要です');">
+        <div class="form-group">
+          <input type="text" placeholder="YOUR NAME / お名前" required>
+        </div>
+        <div class="form-group">
+          <input type="email" placeholder="YOUR EMAIL / メールアドレス" required>
+        </div>
+        <div class="form-group">
+          <textarea rows="5" placeholder="MESSAGE / ご相談内容" required></textarea>
+        </div>
+        <button type="submit" class="submit-btn">SEND MESSAGE</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2026 Ayuki.S film. All Rights Reserved.
+  </footer>
+
+  <!-- Modal -->
+  <div class="modal" id="videoModal">
+    <span class="close-modal" onclick="closeModal()">&times;</span>
+    <div class="modal-content">
+      <iframe id="modalIframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <script>
+    // Filter Function
+    function filterWorks(category) {
+      const cards = document.querySelectorAll('.work-card');
+      const buttons = document.querySelectorAll('.filter-btn');
+      
+      buttons.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      cards.forEach(card => {
+        if (category === 'all' || card.classList.contains(category)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Modal Function
+    function openModal(videoUrl) {
+      const modal = document.getElementById('videoModal');
+      const iframe = document.getElementById('modalIframe');
+      iframe.src = videoUrl;
+      modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('videoModal');
+      const iframe = document.getElementById('modalIframe');
+      iframe.src = '';
+      modal.style.display = 'none';
+    }
+  </script>
+</body>
+</html>
